@@ -9,6 +9,12 @@ variable "availability_zone" {
   description = "AZ to deploy the Nextcloud app"
 }
 
+variable "vpc_cidr" {
+  default     = "10.0.0.0/16"
+  type        = string
+  description = "CIDR for VPC"
+}
+
 variable "ami" {
   type        = string
   description = "AMI that will be used for EC2 instance"
