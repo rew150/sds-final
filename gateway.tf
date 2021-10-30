@@ -8,6 +8,8 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_eip" "ngw" {
+  vpc = true
+
   depends_on = [
     aws_internet_gateway.gw
   ]
