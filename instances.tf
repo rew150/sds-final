@@ -1,7 +1,8 @@
 resource "aws_instance" "app" {
-  ami               = var.ami
-  availability_zone = var.availability_zone
-  instance_type     = var.instance_type
+  ami                  = var.ami
+  availability_zone    = var.availability_zone
+  instance_type        = var.instance_type
+  iam_instance_profile = aws_iam_instance_profile.app.name
 
   network_interface {
     network_interface_id = aws_network_interface.app2gw.id
@@ -24,9 +25,10 @@ resource "aws_instance" "app" {
 }
 
 resource "aws_instance" "db" {
-  ami               = var.ami
-  availability_zone = var.availability_zone
-  instance_type     = var.instance_type
+  ami                  = var.ami
+  availability_zone    = var.availability_zone
+  instance_type        = var.instance_type
+  iam_instance_profile = aws_iam_instance_profile.db.name
 
   network_interface {
     network_interface_id = aws_network_interface.db2ngw.id
