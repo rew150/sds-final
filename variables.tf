@@ -20,6 +20,12 @@ variable "ami" {
   description = "AMI that will be used for EC2 instance"
 }
 
+variable "instance_type" {
+  default     = "t2.micro"
+  type        = string
+  description = "EC2 instance type to deploy"
+}
+
 variable "bucket_name" {
   type        = string
   description = "S3 storage's bucket name for the Nextcloud app"
