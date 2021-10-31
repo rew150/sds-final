@@ -3,6 +3,15 @@ resource "aws_security_group" "app2gw" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [var.vpc_cidr]
+    ipv6_cidr_blocks = []
+  }
+
+  ingress {
     description      = "HTTP"
     from_port        = 80
     to_port          = 80
@@ -18,6 +27,15 @@ resource "aws_security_group" "app2gw" {
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [var.vpc_cidr]
+    ipv6_cidr_blocks = []
   }
 
   egress {
@@ -39,6 +57,24 @@ resource "aws_security_group" "app2db" {
   name   = "app2db"
   vpc_id = aws_vpc.vpc.id
 
+  ingress {
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [module.subnet_addrs.network_cidr_blocks[local.dbconn_subnet]]
+    ipv6_cidr_blocks = []
+  }
+
+  egress {
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [var.vpc_cidr]
+    ipv6_cidr_blocks = []
+  }
+
   egress {
     description = "MariaDB"
     from_port   = 3306
@@ -58,11 +94,29 @@ resource "aws_security_group" "db2app" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [module.subnet_addrs.network_cidr_blocks[local.dbconn_subnet]]
+    ipv6_cidr_blocks = []
+  }
+
+  ingress {
     description = "MariaDB"
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = [module.subnet_addrs.network_cidr_blocks[local.dbconn_subnet]]
+  }
+
+  egress {
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [var.vpc_cidr]
+    ipv6_cidr_blocks = []
   }
 
   tags = {
@@ -74,6 +128,20 @@ resource "aws_security_group" "db2app" {
 resource "aws_security_group" "db2ngw" {
   name   = "db2ngw"
   vpc_id = aws_vpc.vpc.id
+
+  ingress {
+    description = "ICMP"
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+  }
+
+  egress {
+    description = "ICMP"
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+  }
 
   egress {
     description      = "wildcard"
