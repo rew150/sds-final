@@ -1,4 +1,6 @@
 #!/bin/bash
+# fail the pipeline if fail only once
+set -euxo pipefail
 
 mkdir /tmp/nextcloud_installation
 cd /tmp/nextcloud_installation
@@ -10,14 +12,6 @@ cat <<EOF > nextcloud-22.2.0.tar.bz2.sha256
 EOF
 
 sha256sum -c nextcloud-22.2.0.tar.bz2.sha256 < nextcloud-22.2.0.tar.bz2
-
-if [ $? -eq 0 ]
-then
-  echo "Verified"
-else
-  echo "Failed verify sha256"
-  exit 1
-fi
 
 tar -xjvf nextcloud-22.2.0.tar.bz2
 cp -r nextcloud /var/www
@@ -70,3 +64,10 @@ sudo -u www-data php occ maintenance:install \
   --admin-user    "${admin_user}" \
   --admin-pass    "${admin_pass}" \
   --no-interaction
+
+export OCC=/var/www/nextcloud/occ
+
+export NEXTCLOUD_TRUSTED_DOMAIN_I=$(sudo -u www-data php $OCC config:system:get trusted_domains | wc -l)
+sudo -u www-data php $OCC config:system:set \
+  trusted_domains $NEXTCLOUD_TRUSTED_DOMAIN_I \
+  --value=${app_host}

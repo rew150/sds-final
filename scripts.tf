@@ -17,6 +17,7 @@ data "cloudinit_config" "app" {
     content = templatefile(
       "${path.module}/scripts/app.sh.tpl",
       {
+        app_host      = aws_eip.app.public_ip
         database_host = aws_network_interface.db2app.private_ip
         database_name = var.database_name
         database_user = var.database_user
