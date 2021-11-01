@@ -130,17 +130,21 @@ resource "aws_security_group" "db2ngw" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
-    description = "ICMP"
-    from_port   = 8
-    to_port     = 0
-    protocol    = "icmp"
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [var.vpc_cidr]
+    ipv6_cidr_blocks = []
   }
 
   egress {
-    description = "ICMP"
-    from_port   = 8
-    to_port     = 0
-    protocol    = "icmp"
+    description      = "ICMP"
+    from_port        = 8
+    to_port          = 0
+    protocol         = "icmp"
+    cidr_blocks      = [var.vpc_cidr]
+    ipv6_cidr_blocks = []
   }
 
   egress {
