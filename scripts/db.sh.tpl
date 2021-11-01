@@ -16,12 +16,28 @@ GRANT ALL PRIVILEGES ON ${database_name}.* TO '${database_user}'@'%'         IDE
 FLUSH PRIVILEGES;
 EOS
 
+if [ $? -eq 0 ]
+then
+  echo "Created db user"
+else
+  echo "Failed created db user"
+  exit 1
+fi
+
 export MYSQL_PWD=${database_pass}
 
 mysql -sfu ${database_user} <<EOS
 -- create database
 CREATE DATABASE IF NOT EXISTS ${database_name} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 EOS
+
+if [ $? -eq 0 ]
+then
+  echo "Created db"
+else
+  echo "Failed created db"
+  exit 1
+fi
 
 cat <<EOS >> /etc/mysql/my.cnf
 [mysqld]

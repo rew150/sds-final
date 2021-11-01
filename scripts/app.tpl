@@ -1,5 +1,7 @@
 #cloud-config
 packages:
+  - wget
+  - ffmpeg
   - apache2
   - mariadb-client
   - libapache2-mod-php7.4
@@ -13,3 +15,4 @@ packages:
   - php-imagick
   - php7.4-xml
   - php7.4-zip
+  - php7.4-bz2
