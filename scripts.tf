@@ -24,6 +24,10 @@ data "cloudinit_config" "app" {
         database_pass = var.database_pass
         admin_user    = var.admin_user
         admin_pass    = var.admin_pass
+        bucket_name   = var.bucket_name
+        s3_key        = aws_iam_access_key.s3.id
+        s3_secret     = aws_iam_access_key.s3.secret
+        region        = var.region
       }
     )
   }

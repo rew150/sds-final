@@ -71,3 +71,21 @@ export NEXTCLOUD_TRUSTED_DOMAIN_I=$(sudo -u www-data php $OCC config:system:get 
 sudo -u www-data php $OCC config:system:set \
   trusted_domains $NEXTCLOUD_TRUSTED_DOMAIN_I \
   --value=${app_host}
+
+cat <<'EOF' > /var/www/nextcloud/config/s3.config.php
+<?php
+$CONFIG = array(
+  'objectstore' => [
+    'class' => '\\OC\\Files\\ObjectStore\\S3',
+    'arguments' => [
+      'bucket'     => '${bucket_name}',
+      'autocreate' => false,
+      'key'        => '${s3_key}',
+      'secret'     => '${s3_secret}',
+      'region'     => '${region}',
+      'use_ssl'    => true,
+    ],
+  ],
+);
+
+EOF
