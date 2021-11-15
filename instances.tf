@@ -38,7 +38,8 @@ resource "aws_instance" "app" {
   }
 
   depends_on = [
-    aws_instance.db
+    aws_instance.db,
+    aws_s3_bucket.s3,
   ]
 }
 
