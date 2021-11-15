@@ -6,10 +6,10 @@ resource "aws_instance" "app" {
   user_data_base64     = data.cloudinit_config.app.rendered
 
   provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
+    interpreter = local.is_windows ? ["PowerShell", "-Command"] : ["/bin/bash", "-c"]
 
     command = templatefile(
-      "${path.module}/scripts/wait.sh.tpl",
+      "${path.module}/scripts/wait.${local.is_windows ? "ps1" : "sh"}.tpl",
       {
         region       = var.region
         ssm_doc_name = aws_ssm_document.cloud_init_wait.arn
@@ -50,10 +50,10 @@ resource "aws_instance" "db" {
   user_data_base64     = data.cloudinit_config.db.rendered
 
   provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
+    interpreter = local.is_windows ? ["PowerShell", "-Command"] : ["/bin/bash", "-c"]
 
     command = templatefile(
-      "${path.module}/scripts/wait.sh.tpl",
+      "${path.module}/scripts/wait.${local.is_windows ? "ps1" : "sh"}.tpl",
       {
         region       = var.region
         ssm_doc_name = aws_ssm_document.cloud_init_wait.arn

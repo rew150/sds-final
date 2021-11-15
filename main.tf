@@ -23,4 +23,5 @@ locals {
   public_subnet  = "public"
   private_subnet = "private"
   dbconn_subnet  = "dbconn"
+  is_windows     = substr(pathexpand("~"), 0, 1) == "/" ? false : true
 }
