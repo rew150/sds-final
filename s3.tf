@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "s3" {
-  bucket = var.bucket_name
+  bucket        = var.bucket_name
+  force_destroy = true
 
   tags = {
     Name = "${local.App}_${var.bucket_name}_s3"
