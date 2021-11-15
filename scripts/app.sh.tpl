@@ -5,15 +5,15 @@ set -euxo pipefail
 mkdir /tmp/nextcloud_installation
 cd /tmp/nextcloud_installation
 
-wget https://download.nextcloud.com/server/releases/nextcloud-22.2.0.tar.bz2
-cat <<EOF > nextcloud-22.2.0.tar.bz2.sha256
-273dba3ce43501b897e8b78996b50329e31da2b5402866ac20b318cdaddf3e1f  nextcloud-22.2.0.tar.bz2
+wget https://download.nextcloud.com/server/releases/nextcloud-22.2.2.zip
+cat <<EOF > nextcloud-22.2.2.zip.sha256
+ded9f9d7f6737c587bf065f39c46134d7af0566c138de1bcde7f9f2ce3dae5a5  nextcloud-22.2.2.zip
 
 EOF
 
-sha256sum -c nextcloud-22.2.0.tar.bz2.sha256 < nextcloud-22.2.0.tar.bz2
+sha256sum -c nextcloud-22.2.2.zip.sha256 < nextcloud-22.2.2.zip
 
-tar -xjvf nextcloud-22.2.0.tar.bz2
+unzip nextcloud-22.2.2.zip
 cp -r nextcloud /var/www
 
 $(which python3) <<EOF

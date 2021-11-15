@@ -1,6 +1,7 @@
 #cloud-config
 packages:
   - wget
+  - unzip
   - ffmpeg
   - apache2
   - mariadb-client
