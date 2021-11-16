@@ -9,8 +9,15 @@ aws ec2 wait instance-status-ok --instance-ids ${instance_id}
 command_id=$(aws ssm send-command --document-name ${ssm_doc_name} --instance-ids ${instance_id} --output text --query "Command.CommandId")
 
 wait_for_ssm () {
-  while aws ssm wait command-executed --command-id $command_id --instance-id ${instance_id} ; ret=$? ; [ $ret -eq 255 ] ; do
-    echo "Wait command return 255, restart waiting session..."
+  while true ; do
+    output_text=$(aws ssm wait command-executed --command-id $command_id --instance-id ${instance_id} 2>&1);
+    ret=$?;
+    echo $output_text;
+    if [[ "$output_text" == *"Max attempts exceeded"* ]]; then
+      echo "Max attempts exceeded, restart waiting session...";
+    else
+      break;
+    fi
   done
   return $ret
 }
