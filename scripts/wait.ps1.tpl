@@ -9,9 +9,10 @@ $commandId = aws ssm send-command --document-name ${ssm_doc_name} --instance-ids
 
 function waitForSSM() {
   while ($True) {
-    aws ssm wait command-executed --command-id $commandId --instance-id ${instance_id};
-    if ($LASTEXITCODE -eq 255) {
-      Write-Host "Wait command return 255, restart waiting session...";
+    $outputText = aws ssm wait command-executed --command-id $commandId --instance-id ${instance_id} 2>&1;
+    Write-Host $outputText;
+    if ($outputText -like "*Max attempts exceeded*") {
+      Write-Host "Max attempts exceeded, restart waiting session...";
     } else {
       break;
     }
